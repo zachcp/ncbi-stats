@@ -3,6 +3,7 @@ title: NCBI Stats
 toc: true
 sql:
   assembly_stats: ./data/assembly_stats.parquet
+  taxonomy: ./data/taxonomy.parquet
 ---
 
 
