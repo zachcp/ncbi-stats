@@ -25,7 +25,6 @@ COPY (
         "column03" as wgs_master,
         CAST("column05" AS INTEGER) as tax_id,
         CAST("column06" AS INTEGER) as species_taxid,
-        "column06" as species_taxid,
         "column07" as organism_name,
         "column08" as infraspecific_name,
         "column09" as isolate,
