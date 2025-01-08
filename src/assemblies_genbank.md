@@ -1,5 +1,5 @@
 ---
-title: NCBI Genbank Assemblies
+title: NCBI Genbank Assemblies (Genbank)
 toc: true
 sql:
   assembly_stats_genbank: ./data/assembly_stats_genbank.parquet
@@ -57,4 +57,30 @@ Plot.plot({
 
 ```sql
 SELECT * FROM assembly_stats_genbank LIMIT 10;
+```
+
+
+## Contributors
+
+### Top Contributors
+
+```sql
+select * from histogram(assembly_stats_genbank, submitter);
+```
+
+### All Contributors
+
+```js
+const searchTerm = view(Inputs.text({
+  label: "Search submitters:",
+  placeholder: "Enter submitter name"
+}))
+```
+
+```sql
+SELECT submitter, count(*) as submissioncounts
+FROM assembly_stats_genbank
+WHERE submitter LIKE ${'%' + searchTerm + '%'}
+GROUP BY submitter
+ORDER BY submissioncounts DESC
 ```
