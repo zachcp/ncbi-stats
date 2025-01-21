@@ -1,42 +1,51 @@
 ---
 title: NCBI Genbank Assemblies (RefSeq)
 toc: true
-sql:
-  assembly_stats_refseq: ./data/assembly_stats_refseq.parquet
 ---
+
+```js
+import {DuckDBClient} from "npm:@observablehq/duckdb";
+const db = await DuckDBClient.of({base: FileAttachment("data/sql/ncbi_stats.duckdb")});
+```
+
+
+# Assemblies Genbaml
 
 
 ## Assembly Count
 
-```sql
-SELECT count(*) FROM assembly_stats_refseq;
+```js
+db.queryRow(`SELECT COUNT() as refseq_accessions FROM base.assembly_summary_genbank`)
 ```
 
-```sql
-SELECT excluded_from_refseq, count(*) FROM assembly_stats_refseq GROUP BY excluded_from_refseq;
+## Excluded Reasons
+```js
+view(
+  Inputs.table(db.query(`
+    SELECT excluded_from_refseq, count(*) as refseq_accessions
+    FROM base.assembly_summary_genbank
+    GROUP BY excluded_from_refseq
+    ORDER BY refseq_accessions DESC `)))
 ```
 
-
-```sql
-SELECT *
-FROM assembly_stats_refseq
-WHERE excluded_from_refseq = 'from large multi-isolate project';
-```
 
 ## Assembly Count By Year
 
-```sql  id=by_year
-SELECT year, count(*) as count FROM assembly_stats_refseq GROUP BY year;
+```js
+
+let yearly_deposit = db.query(`SELECT year, count(*) as count FROM base.assembly_summary_genbank GROUP BY year;`);
+view(Inputs.table(yearly_deposit));
+
 ```
 
 ```js
 Plot.plot({
   marks: [
-    Plot.line(by_year, {
+    Plot.line(yearly_deposit, {
       x: "year",
       y: "count"
     }),
-    Plot.dot(by_year, {
+    Plot.dot(yearly_deposit, {
       x: "year",
       y: "count"
     })
@@ -55,6 +64,9 @@ Plot.plot({
 
 ## Assembly Head
 
-```sql
-SELECT * FROM assembly_stats_refseq LIMIT 10;
+```js
+view(
+  Inputs.table(
+    db.query(`select * from base.assembly_summary_genbank limit 100;`)));
+
 ```

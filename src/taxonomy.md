@@ -1,10 +1,13 @@
 ---
 title: NCBI Taxonomy Data
 toc: true
-sql:
-  taxonomy: ./data/taxonomy.parquet
 ---
 
+
+```js
+import {DuckDBClient} from "npm:@observablehq/duckdb";
+const db = await DuckDBClient.of({base: FileAttachment("data/sql/ncbi_stats.duckdb")});
+```
 
 
 # Species Count By Taxon
@@ -23,24 +26,33 @@ const minCount = view(Inputs.range(
 
 <!-- WHERE phot_g_mean_mag BETWEEN ${mag - 0.1} AND ${mag + 0.1} -->
 
-```sql id=taxData
-SELECT
-CASE ${taxLevel}
-    WHEN 'superkingdom' THEN superkingdom
-    WHEN 'kingdom' THEN kingdom
-    WHEN 'phylum' THEN phylum
-    WHEN 'class' THEN class
-    WHEN 'order' THEN "order"
-    WHEN 'family' THEN family
-    WHEN 'genus' THEN genus
-    WHEN 'species' THEN species
-END as taxa,
-COUNT(*) as count
-FROM taxonomy
-GROUP BY 1
-ORDER BY count DESC
-LIMIT ${minCount}
+
+
+```js
+
+let tax_query = `SELECT
+  CASE '${taxLevel}'
+      WHEN 'superkingdom' THEN superkingdom
+      WHEN 'kingdom' THEN kingdom
+      WHEN 'phylum' THEN phylum
+      WHEN 'class' THEN class
+      WHEN 'order' THEN "order"
+      WHEN 'family' THEN family
+      WHEN 'genus' THEN genus
+      WHEN 'species' THEN species
+  END as taxa,
+  COUNT(*) as count
+  FROM base.ncbi_taxonomy
+  GROUP BY taxa
+  ORDER BY count DESC
+  LIMIT ${minCount}`
+
+let tax_tab =  db.query(tax_query)
+view(Inputs.table(tax_tab))
+
 ```
+
+## Taxa Plot
 
 ```js
 Plot.plot({
@@ -49,7 +61,7 @@ Plot.plot({
   x: {label: "Count"},
   y: {label: null},
   marks: [
-    Plot.barX(taxData, {
+    Plot.barX(tax_tab, {
       y: "taxa",
       x: "count",
       sort: {y: "x", reverse: true},
@@ -65,6 +77,11 @@ Plot.plot({
 
 # Taxonomy Head
 
-```sql
-select * from taxonomy;
+First 100 Entries.
+
+```js
+view(
+  Inputs.table(
+    db.query(`select * from base.ncbi_taxonomy limit 100;`)));
+
 ```

@@ -1,9 +1,13 @@
 ---
 title: NCBI Genbank Assemblies (Genbank)
 toc: true
-sql:
-  assembly_stats_genbank: ./data/assembly_stats_genbank.parquet
 ---
+
+
+```js
+import {DuckDBClient} from "npm:@observablehq/duckdb";
+const db = await DuckDBClient.of({base: FileAttachment("data/sql/ncbi_stats.duckdb")});
+```
 
 
 ## Assembly Count
@@ -64,8 +68,10 @@ SELECT * FROM assembly_stats_genbank LIMIT 10;
 
 ### Top Contributors
 
-```sql
-select * from histogram(assembly_stats_genbank, submitter);
+```js
+view(
+  Inputs.table(db.query(`select * from histogram(base.assembly_stats_genbank, submitter);`)))
+
 ```
 
 ### All Contributors
@@ -77,10 +83,12 @@ const searchTerm = view(Inputs.text({
 }))
 ```
 
-```sql
+```js
+
+view(Inputs.table(db.query(`
 SELECT submitter, count(*) as submissioncounts
 FROM assembly_stats_genbank
 WHERE submitter LIKE ${'%' + searchTerm + '%'}
 GROUP BY submitter
-ORDER BY submissioncounts DESC
+ORDER BY submissioncounts DESC`)))
 ```
