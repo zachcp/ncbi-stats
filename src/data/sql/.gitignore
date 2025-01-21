@@ -1,0 +1,4 @@
+ncbi_stats.duckdb
+*.txt
+*.dmp
+*.zip
