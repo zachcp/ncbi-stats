@@ -38,7 +38,7 @@ SELECT
     "column22" as asm_not_live_date,
     "column23" as assembly_type, -- enum
     "column24" as group, -- very useful for sorting.
-    "column25" AS INTEGER as genome_size, -- int
+    CAST("column25" AS BIGINT) as genome_size, -- int
     "column26" as genome_size_ungapped, -- int
     "column27" as gc_percent, --f32
     "column28" as replicon_count, -- smallint
@@ -47,7 +47,7 @@ SELECT
     "column31" as annotation_provider, -- str
     "column32" as annotation_name,
     "column33" as annotation_date,
-    TRY_CAST ("column34" AS BIGINT) as total_gene_count, -- int
+    TRY_CAST (NULLIF("column34", 'na') AS BIGINT) as total_gene_count,
     "column35" as protein_coding_gene_count, --int
     "column36" as non_coding_gene_count, --int
     "column37" as pubmed_id -- comma separated IDs
