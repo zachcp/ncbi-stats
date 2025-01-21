@@ -18,7 +18,7 @@ db.queryRow(`SELECT COUNT() as refseq_accessions FROM base.assembly_summary_genb
 
 
 ```js
-db.queryRow(`SELECT excluded_from_refseq, count(*) FROM assembly_stats_genbank GROUP BY excluded_from_refseq`)
+db.queryRow(`SELECT excluded_from_refseq, count(*) FROM base.assembly_summary_genbank GROUP BY excluded_from_refseq`)
 ```
 
 
@@ -29,7 +29,7 @@ db.queryRow(`SELECT excluded_from_refseq, count(*) FROM assembly_stats_genbank G
 view(
   Inputs.table(db.query(`
     SELECT excluded_from_refseq, count(*) as refseq_accessions
-    FROM base.assembly_summary_refseq
+    FROM base.assembly_summary_genbank
     GROUP BY excluded_from_refseq
     ORDER BY refseq_accessions DESC `)))
 ```
@@ -41,7 +41,7 @@ view(
 
 ```js
 
-let yearly_deposit = db.query(`SELECT year, count(*) as count FROM base.assembly_summary_refseq GROUP BY year;`);
+let yearly_deposit = db.query(`SELECT year, count(*) as count FROM base.assembly_summary_genbank GROUP BY year;`);
 view(Inputs.table(yearly_deposit));
 
 ```
@@ -76,7 +76,7 @@ Plot.plot({
 ```js
 view(
   Inputs.table(
-    db.query(`select * from base.assembly_summary_refseq limit 100;`)));
+    db.query(`select * from base.assembly_summary_genbank limit 100;`)));
 
 ```
 
@@ -86,7 +86,7 @@ view(
 
 ```js
 view(
-  Inputs.table(db.query(`select * from histogram(base.assembly_stats_genbank, submitter);`)))
+  Inputs.table(db.query(`select * from histogram(base.assembly_summary_genbank, submitter);`)))
 
 ```
 
@@ -103,7 +103,7 @@ const searchTerm = view(Inputs.text({
 
 view(Inputs.table(db.query(`
 SELECT submitter, count(*) as submissioncounts
-FROM assembly_stats_genbank
+FROM base.assembly_summary_genbank
 WHERE submitter LIKE ${'%' + searchTerm + '%'}
 GROUP BY submitter
 ORDER BY submissioncounts DESC`)))
