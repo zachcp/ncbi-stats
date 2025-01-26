@@ -3,8 +3,23 @@ DROP TABLE IF EXISTS assembly_summary_refseq;
 
 CREATE TABLE assembly_summary_refseq AS
 SELECT
-    "column00" as assembly_accession,
-    "column01" as bioproject,
+    -- "column00" as assembly_accession,
+    REGEXP_EXTRACT ("column00", '^(GCA|GCF)', 0) as assembly_accession_loc,
+    CAST(
+        REGEXP_EXTRACT ("column00", '_(\d+)\.', 1) AS INTEGER
+    ) as assembly_accession_int,
+    CAST(
+        REGEXP_EXTRACT ("column00", '\.(\d+)$', 1) AS INTEGER
+    ) as assembly_accession_version,
+
+    -- "column01" as bioproject,
+    -- Convert this into 1 column: PRJNA13184 => 13184
+    CASE
+        WHEN "column01" = '' THEN NULL
+        ELSE CAST(
+            NULLIF(REGEXP_EXTRACT ("column01", 'PRJNA(\d+)', 1), '') AS INTEGER
+        )
+    END as bioproject,
     "column02" as biosample,
     "column03" as wgs_master,
     "column04" as refseq_category,

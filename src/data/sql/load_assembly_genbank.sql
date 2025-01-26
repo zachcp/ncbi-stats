@@ -3,8 +3,21 @@ DROP TABLE IF EXISTS assembly_summary_genbank;
 
 CREATE TABLE assembly_summary_genbank AS
 SELECT
-    "column00" as assembly_accession,
-    "column01" as bioproject,
+    -- Convert this into 3 columns: GCA_000001515.5 => GCA; 1515; 5
+    REGEXP_EXTRACT ("column00", '^(GCA|GCF)', 0) as assembly_accession_loc,
+    CAST(
+        REGEXP_EXTRACT ("column00", '_(\d+)\.', 1) AS INTEGER
+    ) as assembly_accession_int,
+    CAST(
+        REGEXP_EXTRACT ("column00", '\.(\d+)$', 1) AS INTEGER
+    ) as assembly_accession_version,
+    -- Convert this into 1 column: PRJNA13184 => 13184
+    CASE
+        WHEN "column01" = '' THEN NULL
+        ELSE CAST(
+            NULLIF(REGEXP_EXTRACT ("column01", 'PRJNA(\d+)', 1), '') AS INTEGER
+        )
+    END as bioproject,
     "column02" as biosample,
     "column03" as wgs_master,
     "column04" as refseq_category,
