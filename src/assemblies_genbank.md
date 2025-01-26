@@ -1,5 +1,5 @@
 ---
-title: NCBI Genbank Assemblies (Genbank)
+title: NCBI Genbank Assemblies
 toc: true
 ---
 

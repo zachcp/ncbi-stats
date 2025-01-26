@@ -1,5 +1,5 @@
 ---
-title: NCBI Genbank Assemblies (RefSeq)
+title: NCBI Refseq Assemblies
 toc: true
 ---
 
