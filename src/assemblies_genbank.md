@@ -46,29 +46,10 @@ view(Inputs.table(yearly_deposit));
 
 ```
 
-
 ```js
-Plot.plot({
-  marks: [
-    Plot.line(yearly_deposit, {
-      x: "year",
-      y: "count"
-    }),
-    Plot.dot(yearly_deposit, {
-      x: "year",
-      y: "count"
-    })
-  ],
-  grid: true,
-  y: {
-    label: "Number of Assemblies"
-  },
-  x: {
-    label: "Year"
-  }
-})
+import {assemblies_by_year} from "./components/assemblies.js";
+view(assemblies_by_year(yearly_deposit))
 ```
-
 
 
 ## Assembly Head
