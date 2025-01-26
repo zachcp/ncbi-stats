@@ -32,7 +32,11 @@ SELECT
     "column16" as submitter,
     "column17" as gbrs_paired_asm,
     "column18" as paired_asm_comp,
-    "column19" as ftp_path,
+    REPLACE (
+        "column19",
+        'https://ftp.ncbi.nlm.nih.gov/genomes/all/',
+        ''
+    ) as ftp_path,
     "column20" as excluded_from_refseq,
     "column21" as relation_to_type_material, -- enum
     "column22" as asm_not_live_date,
