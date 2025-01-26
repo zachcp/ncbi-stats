@@ -18,7 +18,14 @@ SELECT
             NULLIF(REGEXP_EXTRACT ("column01", 'PRJNA(\d+)', 1), '') AS INTEGER
         )
     END as bioproject,
-    "column02" as biosample,
+    -- Convert this into 1 column: SAMN02803731 => 2803731
+    -- "column02" as biosample,
+    CASE
+        WHEN "column01" = '' THEN NULL
+        ELSE CAST(
+            NULLIF(REGEXP_EXTRACT ("column02", 'SAMN(\d+)', 1), '') AS INTEGER
+        )
+    END as biosample,
     "column03" as wgs_master,
     "column04" as refseq_category,
     CAST("column05" AS INTEGER) as tax_id, -- int
@@ -26,10 +33,10 @@ SELECT
     "column07" as organism_name,
     "column08" as infraspecific_name,
     "column09" as isolate,
-    "column10" as version_status,
-    "column11" as assembly_level,
-    "column12" as release_type,
-    "column13" as genome_rep,
+    CAST("column10" as version_status_enum) as version_status,
+    CAST("column11" as assembly_level_enum) as assembly_level,
+    CAST("column12" as release_type_enum) as release_type,
+    CAST("column13" as genome_rep_enum) as genome_rep,
     CAST("column14" AS DATE) as seq_rel_date,
     EXTRACT(
         YEAR

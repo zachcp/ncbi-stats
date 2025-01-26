@@ -1,3 +1,10 @@
+CREATE TYPE assembly_level_enum AS ENUM (
+    'Complete Genome',
+    'Chromosome',
+    'Scaffold',
+    'Contig'
+);
+
 CREATE TYPE assembly_type_enum AS ENUM (
     'haploid',
     'haploid-with-alt',
@@ -7,7 +14,8 @@ CREATE TYPE assembly_type_enum AS ENUM (
     'alternate-pseudohaplotype'
 );
 
--- Relation to type material
+CREATE TYPE genome_rep_enum AS ENUM ('Full', 'Partial');
+
 CREATE TYPE relation_to_type_material_enum AS ENUM (
     'assembly from type material',
     'assembly from synonym type material',
@@ -19,3 +27,7 @@ CREATE TYPE relation_to_type_material_enum AS ENUM (
     'ICTV additional isolate',
     'na'
 );
+
+CREATE TYPE release_type_enum AS ENUM ('Major', 'Minor', 'Patch');
+
+CREATE TYPE version_status_enum AS ENUM ('latest', 'replaced', 'suppressed');
