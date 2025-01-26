@@ -14,6 +14,7 @@ CREATE TYPE assembly_type_enum AS ENUM (
     'alternate-pseudohaplotype'
 );
 
+-- CREATE TYPE excluded_from_refseq_enum AS ENUM ('Full', 'Partial');
 CREATE TYPE genome_rep_enum AS ENUM ('Full', 'Partial');
 
 CREATE TYPE relation_to_type_material_enum AS ENUM (
