@@ -30,9 +30,9 @@ export default {
   // toc: true, // whether to show the table of contents
   pager: false, // whether to show previous & next links in the footer
   // output: "dist", // path to the output root for build
-  // search: true, // activate search
-  // linkify: true, // convert URLs in Markdown to links
-  // typographer: false, // smart quotes and other typographic improvements
+  search: true, // activate search
+  linkify: true, // convert URLs in Markdown to links
+  typographer: false, // smart quotes and other typographic improvements
   // preserveExtension: false, // drop .html from URLs
   // preserveIndex: false, // drop /index from URLs
 };
