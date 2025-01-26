@@ -6,6 +6,7 @@ toc: true
 
 ```js
 import {DuckDBClient} from "npm:@observablehq/duckdb";
+import {assemblies_by_year} from "./components/assemblies.js";
 const db = await DuckDBClient.of({base: FileAttachment("data/sql/ncbi_stats.duckdb")});
 ```
 
@@ -25,6 +26,7 @@ db.queryRow(`SELECT excluded_from_refseq, count(*) FROM base.assembly_summary_ge
 
 
 ## Excluded Reasons
+
 ```js
 view(
   Inputs.table(db.query(`
@@ -35,41 +37,12 @@ view(
 ```
 
 
-
-
 ## Assembly Count By Year
 
 ```js
-
 let yearly_deposit = db.query(`SELECT year, count(*) as count FROM base.assembly_summary_genbank GROUP BY year;`);
-view(Inputs.table(yearly_deposit));
-
+view(assemblies_by_year(yearly_deposit))
 ```
-
-
-```js
-Plot.plot({
-  marks: [
-    Plot.line(yearly_deposit, {
-      x: "year",
-      y: "count"
-    }),
-    Plot.dot(yearly_deposit, {
-      x: "year",
-      y: "count"
-    })
-  ],
-  grid: true,
-  y: {
-    label: "Number of Assemblies"
-  },
-  x: {
-    label: "Year"
-  }
-})
-```
-
-
 
 ## Assembly Head
 
@@ -80,17 +53,21 @@ view(
 
 ```
 
-## Contributors
+## Submitters
 
-### Top Contributors
+### Top Submitters
 
 ```js
-view(
-  Inputs.table(db.query(`select * from histogram(base.assembly_summary_genbank, submitter);`)))
-
+view(Inputs.table(db.query(`
+  SELECT submitter, COUNT(*) as count
+  FROM base.assembly_summary_genbank
+  GROUP BY submitter
+  ORDER BY count DESC;`)))
 ```
 
-### All Contributors
+
+
+### All Submitters
 
 ```js
 const searchTerm = view(Inputs.text({
@@ -104,7 +81,7 @@ const searchTerm = view(Inputs.text({
 view(Inputs.table(db.query(`
 SELECT submitter, count(*) as submissioncounts
 FROM base.assembly_summary_genbank
-WHERE submitter LIKE ${'%' + searchTerm + '%'}
+WHERE submitter LIKE '%${searchTerm}%'
 GROUP BY submitter
 ORDER BY submissioncounts DESC`)))
 ```

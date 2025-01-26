@@ -72,6 +72,8 @@ Plot.plot({
 })
 ```
 
+
+
 </br>
 
 
@@ -85,3 +87,6 @@ view(
     db.query(`select * from base.ncbi_taxonomy limit 100;`)));
 
 ```
+
+
+## Taxnomoy Links
