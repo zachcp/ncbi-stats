@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 ## Data Files ------------------------------------------------------------------------
 assembly_summary_genbank.txt:
 	wget https://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/assembly_summary_genbank.txt
@@ -13,8 +15,9 @@ rankedlineage.dmp:
 ## Create DDB via sql --------------------------------------------------------------
 ncbi_stats.duckdb: assembly_summary_genbank.txt assembly_summary_refseq.txt rankedlineage.dmp
 	# load  ncbi_assemblies_{genbnk,refseq}
-	duckdb ncbi_stats.duckdb < load_assembly_genbank.sql
-	duckdb ncbi_stats.duckdb < load_assembly_refseq.sql
+	duckdb ncbi_stats.duckdb  < enums.sql
+	duckdb ncbi_stats.duckdb  < load_assembly_genbank.sql
+	duckdb ncbi_stats.duckdb  < load_assembly_refseq.sql
 	#load the taxonomy data
 	duckdb ncbi_stats.duckdb < load_taxonomy.sql
 

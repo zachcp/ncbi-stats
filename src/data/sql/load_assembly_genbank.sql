@@ -38,7 +38,7 @@ SELECT
         ''
     ) as ftp_path,
     "column20" as excluded_from_refseq,
-    "column21" as relation_to_type_material, -- enum
+    CAST("column21" AS relation_to_type_material_enum) as relation_to_type_material, -- enum
     "column22" as asm_not_live_date,
     "column23" as assembly_type, -- enum
     "column24" as group, -- very useful for sorting.
