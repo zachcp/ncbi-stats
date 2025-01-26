@@ -34,9 +34,9 @@ SELECT
     "column18" as paired_asm_comp,
     REPLACE("column19", 'https://ftp.ncbi.nlm.nih.gov/genomes/all/', '') as ftp_path,
     "column20" as excluded_from_refseq,
-    "column21" as relation_to_type_material, -- enum
+    CAST("column21" AS relation_to_type_material_enum) as relation_to_type_material, -- enum
     "column22" as asm_not_live_date,
-    "column23" as assembly_type, -- enum
+    CAST("column23" AS assembly_type_enum) as assembly_type, -- enum
     "column24" as group, -- very useful for sorting.
     CAST("column25" AS BIGINT) as genome_size, -- int
     "column26" as genome_size_ungapped, -- int

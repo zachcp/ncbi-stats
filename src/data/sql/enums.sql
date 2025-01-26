@@ -1,3 +1,13 @@
+CREATE TYPE assembly_type_enum AS ENUM (
+    'haploid',
+    'haploid-with-alt',
+    'haploid-with-alt-loci',
+    'diploid',
+    'unresolved-diploid',
+    'alternate-pseudohaplotype'
+);
+
+-- Relation to type material
 CREATE TYPE relation_to_type_material_enum AS ENUM (
     'assembly from type material',
     'assembly from synonym type material',
